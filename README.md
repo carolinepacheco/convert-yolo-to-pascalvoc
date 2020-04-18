@@ -1,4 +1,4 @@
-# Convert-COCO-to-PascalVOC
+# Convert-YOLO-to-PascalVOC
 
 Last Page Update: **25/08/2018**
 
