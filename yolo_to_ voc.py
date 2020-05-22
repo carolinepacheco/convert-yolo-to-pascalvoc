@@ -14,7 +14,7 @@ import numpy as np
 from os.path import join
 
 ## coco classes
-COCO_CLASSES = ('person', 'bicycle', 'car', 'motorcycle', 'airplane', 'bus',
+YOLO_CLASSES = ('person', 'bicycle', 'car', 'motorcycle', 'airplane', 'bus',
                 'train', 'truck', 'boat', 'traffic light', 'fire', 'hydrant',
                 'stop sign', 'parking meter', 'bench', 'bird', 'cat', 'dog',
                 'horse', 'sheep', 'cow', 'elephant', 'bear', 'zebra',
@@ -132,4 +132,4 @@ def xml_transform(root, classes):
         f.close()     
        
 
-xml_transform(ROOT, COCO_CLASSES)
+xml_transform(ROOT, YOLO_CLASSES)
