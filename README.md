@@ -11,7 +11,7 @@ A python script to convert YOLO into Pascal VOC 2012 format. It generates xml an
  
  * Make sure you have the dependencies listed on yolo_to_voc.py. 
  
- * Update root path (where this script lies) in line 46. ``ROOT = '/coco/'``. 
+ * Update root path (where this script lies) in line 46. ``ROOT = 'coco'``. 
  
  * Let's say that you have a custom dataset, which is not included in COCO. eg ship. Add its name to ``YOLO_CLASSES=()``, in the first position.
  
