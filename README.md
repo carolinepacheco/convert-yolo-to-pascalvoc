@@ -1,6 +1,6 @@
 # Convert-YOLO-to-PascalVOC
 
-Last Page Update: **22/05/2020**
+Last Page Update: **20/07/2020**
 
 A python script to convert YOLO into Pascal VOC 2012 format. It generates xml annotation file in PASCAL VOC format for Object Detection.
 
