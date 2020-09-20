@@ -19,8 +19,17 @@ A python script to convert YOLO into Pascal VOC 2012 format. It generates xml an
  
  * Put all your images at /coco/images folder.
  
- * Put corresponding annotations (.txt files) to /coco/labels.
+ * Put corresponding annotations (.txt files) to /coco/labels
  
+ 
+##  Prerequisites (my environments)
+
+* Python 3.8.3
+
+* Numpy
+
+* Opencv 
+
  
  ## Usage
  
@@ -34,7 +43,10 @@ python3 yolo_to_voc.py
  
 ```
 python yolo_to_voc.py
+
 ```
+
+
  
  
 
