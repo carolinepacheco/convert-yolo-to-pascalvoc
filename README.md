@@ -26,7 +26,11 @@ A python script to convert YOLO into Pascal VOC 2012 format. It generates xml an
  
  Please to run this script use the command below :
  
- ``python3 yolo_to_voc.py``.  or ``python yolo_to_voc.py``
+ `python3 yolo_to_voc.py`
+ 
+ or 
+ 
+ `python yolo_to_voc.py`
  
  
 
