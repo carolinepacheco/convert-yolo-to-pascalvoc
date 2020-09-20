@@ -13,14 +13,23 @@ A python script to convert YOLO into Pascal VOC 2012 format. It generates xml an
  
  * Update root path(where this script lies) in line 46. ``ROOT = '/coco/'``. 
  
- * Let's say that you have a custom dataset, which is not included in COCO. eg ship. Add its name to YOLO_CLASSES=(), in the first position.
+ * Let's say that you have a custom dataset, which is not included in COCO. eg ship. Add its name to ``YOLO_CLASSES=()``, in the first position.
  
  * Remove images that are already in /coco/images, /coco/labels and /coco/outputs.
  
- * Put all your images at /coco/images folder
+ * Put all your images at /coco/images folder.
  
- * Put corresponding annotations (.txt files) to /coco/labels
+ * Put corresponding annotations (.txt files) to /coco/labels.
  
+ 
+ ## Usage
+ 
+ In order to run this script please use the command below
+ 
+ ``python3 yolo_to_voc.py``
+ 
+ or
+ ``python yolo_to_voc.py``
  
  
 
