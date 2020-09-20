@@ -43,7 +43,7 @@ def unconvert(class_id, width, height, x, y, w, h):
 
 
 ## path root folder
-ROOT = '/coco/'
+ROOT = 'coco'
 
 
 ## converts coco into xml 
