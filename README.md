@@ -46,13 +46,15 @@ python yolo_to_voc.py
 
 ```
 
+Some academic projects:
+--------
+```
+https://www.behance.net/carolinepacheco
+```
 
- 
- 
-
-
-
-
-
-
+Medium blog site:
+-------------------------
+```
+https://medium.com/@lolyne.pacheco
+```
 
