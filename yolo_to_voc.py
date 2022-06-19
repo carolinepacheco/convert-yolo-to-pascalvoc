@@ -30,7 +30,6 @@ YOLO_CLASSES = ('person', 'bicycle', 'car', 'motorcycle', 'airplane', 'bus',
                 'refrigerator', 'book', 'clock', 'vase', 'scissors',
                 'teddy bear', 'hair drier', 'toothbrush')
 
-
 ## converts the normalized positions  into integer positions
 def unconvert(class_id, width, height, x, y, w, h):
 
@@ -66,6 +65,11 @@ def xml_transform(root, classes):
 
     for i in range(len(ids)):
         img_id = ids[i] 
+        if img_id == "classes":
+            continue
+        if os.path.exists(outpath % img_id):
+            continue
+        print(imgpath % img_id)
         img= cv2.imread(imgpath % img_id)
         height, width, channels = img.shape # pega tamanhos e canais das images
 
