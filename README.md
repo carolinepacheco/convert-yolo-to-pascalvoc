@@ -31,7 +31,7 @@ A python script to convert YOLO into Pascal VOC 2012 format. It generates xml an
 
  
 ## Usage
-```shell
+```console
 $python3 yolo_to_voc.py --help
 usage: yolo_to_voc.py [-h] [--base_folder BASE_FOLDER]
                       [--output_folder OUTPUT_FOLDER]
