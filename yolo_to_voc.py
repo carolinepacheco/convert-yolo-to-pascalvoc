@@ -8,10 +8,54 @@ Created on Fri Aug 17 22:10:01 2018
 
 import os
 import cv2
+import json
+import argparse
+
+import numpy as np
+
 from xml.dom.minidom import parseString
 from lxml.etree import Element, SubElement, tostring
-import numpy as np
 from os.path import join
+
+parser = argparse.ArgumentParser(description="Convert YOLO annotations to PASCAL VOC format",
+                                formatter_class=argparse.RawTextHelpFormatter)
+
+parser.add_argument(
+    '--base_folder',
+    help='Folder to search for YOLO dataset. defaults to "yolo"',
+    type=str,
+    default="yolo",
+    required=False
+)
+parser.add_argument(
+    '--output_folder',
+    help='Output folder name to store the PASCAL annotations. defaults to {base_folder}/pascal',
+    type=str,
+    default="pascal",
+    required=False
+)
+parser.add_argument(
+    '--label_folder',
+    help='Folder containing labels in YOLO format. defaults to {base_folder}/labels',
+    type=str,
+    default="labels",
+    required=False
+)
+parser.add_argument(
+    '--image_folder',
+    help='Folder containing dataset images. defaults to {base_folder}/images',
+    type=str,
+    default="images",
+    required=False
+)
+parser.add_argument(
+    '--class_map',
+    help='Path to json file where an object of type { number: string } stores class values for custom dataset. defaults of all coco classes',
+    type=str,
+    default=None,
+    required=False
+)
+
 
 ## coco classes
 YOLO_CLASSES = ('person', 'bicycle', 'car', 'motorcycle', 'airplane', 'bus',
@@ -30,9 +74,19 @@ YOLO_CLASSES = ('person', 'bicycle', 'car', 'motorcycle', 'airplane', 'bus',
                 'refrigerator', 'book', 'clock', 'vase', 'scissors',
                 'teddy bear', 'hair drier', 'toothbrush')
 
-## converts the normalized positions  into integer positions
-def unconvert(class_id, width, height, x, y, w, h):
 
+def load_classes(json_path):
+    if json_path == None:
+        return YOLO_CLASSES
+
+    with open(json_path, 'r') as fp:
+        class_map = json.load(fp)
+    
+    return { int(k): v for k, v in class_map.items() }
+
+
+## converts the normalized positions into integer positions
+def unconvert(class_id, width, height, x, y, w, h):
     xmax = int((x*width) + (w * width)/2.0)
     xmin = int((x*width) - (w * width)/2.0)
     ymax = int((y*height) + (h * height)/2.0)
@@ -41,13 +95,22 @@ def unconvert(class_id, width, height, x, y, w, h):
     return (class_id, xmin, xmax, ymin, ymax)
 
 
-## path root folder
-ROOT = 'coco'
-
-
 ## converts coco into xml 
-def xml_transform(root, classes):  
-    class_path  = join(root, 'labels')
+def main(args):
+    base_folder = args.base_folder
+    output_folder = args.output_folder
+    label_folder = args.label_folder
+    image_folder = args.image_folder
+    class_map = args.class_map
+
+    assert base_folder != None
+    assert output_folder != None
+    assert label_folder != None
+    assert image_folder != None    
+
+    classes = load_classes(class_map)
+
+    class_path  = join(base_folder, 'labels')
     ids = list()
     l=os.listdir(class_path)
     
@@ -57,21 +120,24 @@ def xml_transform(root, classes):
         
     ids=[x.split('.')[0] for x in l]   
 
-    annopath = join(root, 'labels', '%s.txt')
-    imgpath = join(root, 'images', '%s.jpg')
+    annopath = join(base_folder, label_folder, '%s.txt')
+    imgpath = join(base_folder, image_folder, '%s.jpg')
     
-    os.makedirs(join(root, 'outputs'), exist_ok=True)
-    outpath = join(root, 'outputs', '%s.xml')
+    os.makedirs(join(base_folder, output_folder), exist_ok=True)
+    outpath = join(base_folder, output_folder, '%s.xml')
 
     for i in range(len(ids)):
-        img_id = ids[i] 
+        img_id = ids[i]
+
         if img_id == "classes":
             continue
         if os.path.exists(outpath % img_id):
             continue
+
         print(imgpath % img_id)
+
         img= cv2.imread(imgpath % img_id)
-        height, width, channels = img.shape # pega tamanhos e canais das images
+        height, width, channels = img.shape #get sizes and channels from images
 
         node_root = Element('annotation')
         node_folder = SubElement(node_root, 'folder')
@@ -128,12 +194,12 @@ def xml_transform(root, classes):
                 node_ymax.text = str(new_label[4])
                 xml = tostring(node_root, pretty_print=True)  
                 dom = parseString(xml)
+
         print(xml)  
-        f =  open(outpath % img_id, "wb")
-        #f = open(os.path.join(outpath, img_id), "w")
-        #os.remove(target)
-        f.write(xml)
-        f.close()     
+
+        with open(outpath % img_id, "wb") as f:
+            f.write(xml)
        
 
-xml_transform(ROOT, YOLO_CLASSES)
+if __name__ == '__main__':
+    main(parser.parse_args())
