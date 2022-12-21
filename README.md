@@ -55,7 +55,7 @@ optional arguments:
 ```
 
 #### Example class map JSON file:
-```
+```json
 {
   "10": "person",
   "11": "bicycle",
