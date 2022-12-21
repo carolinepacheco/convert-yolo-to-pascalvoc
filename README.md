@@ -60,7 +60,7 @@ optional arguments:
   "10": "person",
   "11": "bicycle",
   "20": "car",
-  "30": "motorcycle",
+  "30": "motorcycle"
 }
 ```
 
