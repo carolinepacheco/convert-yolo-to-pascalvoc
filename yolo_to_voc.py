@@ -12,6 +12,7 @@ from xml.dom.minidom import parseString
 from lxml.etree import Element, SubElement, tostring
 import numpy as np
 from os.path import join
+from tqdm import tqdm
 
 ## coco classes
 YOLO_CLASSES = ('person', 'bicycle', 'car', 'motorcycle', 'airplane', 'bus',
@@ -43,6 +44,7 @@ def unconvert(class_id, width, height, x, y, w, h):
 
 ## path root folder
 ROOT = 'coco'
+IMAGE_EXT = ["jpg", "jpeg", "png", "JPG", "PNG"]
 
 
 ## converts coco into xml 
@@ -50,33 +52,39 @@ def xml_transform(root, classes):
     class_path  = join(root, 'labels')
     ids = list()
     l=os.listdir(class_path)
-    
+
     check = '.DS_Store' in l
     if check == True:
         l.remove('.DS_Store')
         
-    ids=[x.split('.')[0] for x in l]   
+    # ids = [x.split('.')[0] for x in l]  
+    ids = [x.split('.txt')[0] for x in l] 
 
     annopath = join(root, 'labels', '%s.txt')
-    imgpath = join(root, 'images', '%s.jpg')
+    imgpath = join(root, 'images', '%s.%s')
+
     
     os.makedirs(join(root, 'outputs'), exist_ok=True)
     outpath = join(root, 'outputs', '%s.xml')
 
-    for i in range(len(ids)):
+    for i in tqdm(range(len(ids))):
         img_id = ids[i] 
         if img_id == "classes":
             continue
         if os.path.exists(outpath % img_id):
             continue
-        print(imgpath % img_id)
-        img= cv2.imread(imgpath % img_id)
+        ext = 0
+        while not os.path.exists(imgpath % (img_id, IMAGE_EXT[ext])):
+          ext+=1
+
+        # print(imgpath % (img_id, IMAGE_EXT[ext]))
+        img= cv2.imread(imgpath % (img_id, IMAGE_EXT[ext]))
         height, width, channels = img.shape # pega tamanhos e canais das images
 
         node_root = Element('annotation')
         node_folder = SubElement(node_root, 'folder')
         node_folder.text = 'VOC2007'
-        img_name = img_id + '.jpg'
+        img_name = img_id + '.' + IMAGE_EXT[ext]
     
         node_filename = SubElement(node_root, 'filename')
         node_filename.text = img_name
@@ -128,7 +136,7 @@ def xml_transform(root, classes):
                 node_ymax.text = str(new_label[4])
                 xml = tostring(node_root, pretty_print=True)  
                 dom = parseString(xml)
-        print(xml)  
+        # print(xml)  
         f =  open(outpath % img_id, "wb")
         #f = open(os.path.join(outpath, img_id), "w")
         #os.remove(target)
